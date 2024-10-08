@@ -1,6 +1,5 @@
 @ECHO OFF
 
-REM can we check here if az has a valid token and skip?
 CALL az config set core.login_experience_v2=off
 CALL az login
 
