@@ -7,10 +7,11 @@ Current WIP to quickly setup an SSH connection to the server, using `az ssh conf
 If an SSH config exists (it'll be created when they first setup a connection through vscode), open it up and check:
 * User is their full UWE email address (including host portion), spelt correctly, all in lowercase
 * Host is `csctcloud.uwe.ac.uk` (spelt correctly)
-* IdentityFile either correctly points to directory on H:\ drive, or on personal machines to C:\Users\X, /Users/X, or /home/X, or is omitted (so default key file used)
+* IdentityFile either correctly points to `H:\.ssh\id_rsa`, or on personal machines to `C:\Users\X\.ssh\id_rsa`, `/Users/X/.ssh/id_rsa`, or `/home/X/.ssh/id_rsa` (or another properly created keyfile if they've chosen a non-default location), or is omitted (so default keyfile used)
 
 If this is all correct/they haven't got to setting up vscode yet:
-* Look in .ssh folder (check this matches what is in SSH config) and check both public and private key are present
+* Look in their `.ssh` folder (check this matches what is in SSH config) and check both public and private key are present
+* If they don't have a `.ssh` folder - get them to go back to 'Generating a key' section of guide and go from there
 * Open up public key in notepad and check not malformed or accidentally overwritten
 
 Get them to connect to the server using Azure CLI (`az login`):
