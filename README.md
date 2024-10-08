@@ -3,7 +3,7 @@
 Current WIP to quickly setup an SSH connection to the server, using `az ssh config` to generate the necessary SSH config and SSH key (and install it on the server) in one step.
 
 ## Troubleshooting
-** Permission denied (publickey) **
+**Permission denied (publickey)**
 If an SSH config exists (it'll be created when they first setup a connection through vscode), open it up and check:
 * User is their full UWE email address (including host portion), spelt correctly, all in lowercase
 * Host is `csctcloud.uwe.ac.uk` (spelt correctly)
@@ -20,7 +20,7 @@ Get them to connect to the server using Azure CLI (`az login`):
 
 If in doubt just generate a new keypair and try copying that...
 
-** Issue with installing Azure CLI SSH extension (`az ssh`) **
+**Issue with installing Azure CLI SSH extension (`az ssh`)**
 Installation fails with pip error, running with --debug flag will show problem with winreg.XX function call (file not found). Issue is caused by conflicting Anaconda libraries being included by Azure CLI during extension install.
 
 Temporarily change Anaconda directory to prevent conflict during extension installation:
