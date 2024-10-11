@@ -2,6 +2,11 @@
 ## Quick Connect
 Current WIP to quickly setup an SSH connection to the server, using `az ssh config` to generate the necessary SSH config and SSH key (and install it on the server) in one step.
 
+Issues:
+* Currently needs a login every time -- any way to check if token issued via Azure CLI?
+* Halts if `as ssh` extension not yet installed (is this a system wide install?) until interacted with
+* Certificate is only issued for an hour -- ideally would be issued for remainder of token life (or configurable) -- (Github Issue)[https://github.com/Azure/azure-cli-extensions/issues/3565]
+
 ## Troubleshooting
 ### Permission denied (publickey)
 If an SSH config exists (it'll be created when they first setup a connection through vscode), open it up and check:
