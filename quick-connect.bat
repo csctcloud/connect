@@ -11,5 +11,6 @@ IF EXIST "C:\Users\%username%\.ssh\csctcloud\" (
     del /q "C:\Users\%username%\.ssh\csctcloud"
 )
 
-CALL az ssh config --ip csctcloud.uwe.ac.uk --file "C:\Users\%username%\.ssh\config" --keys-destination-folder "C:\Users\%username%\.ssh\csctcloud"
+CALL az extension add --upgrade -n ssh
+CALL az ssh config --ip csctcloud.uwe.ac.uk --overwrite --file "C:\Users\%username%\.ssh\config" --keys-destination-folder "C:\Users\%username%\.ssh\csctcloud"
 CALL code -n --remote ssh-remote+csctcloud.uwe.ac.uk
