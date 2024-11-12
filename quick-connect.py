@@ -78,23 +78,24 @@ def isResourceAllowed(account: str) -> bool:
     # * resource name missing in account status
 
     except Exception as e:
-        logger.critical(f"Unexpected error occured checking if user can use resource: {e}")
+        logger.critical(
+            f"Unexpected error occured checking if user can use resource: {e}"
+        )
         showMessageBox(
             "There was a problem completing your login.\n\nPlease run the connection shortcut again and login with your UWE account when prompted."
         )
-        raise Exception(e) # re-raise
+        raise Exception(e)  # re-raise
 
 
 def main() -> int:
-    logger.debug("Running CSCT Cloud Quick Connect")
-
     print(Terminal.BOLD + Terminal.BRIGHT_BLUE, end="")
     print(r""" ,-----. ,---.   ,-----.,--------.     ,-----.,--.    ,-----. ,--. ,--.,------.   
 '  .--./'   .-' '  .--./'--.  .--'    '  .--./|  |   '  .-.  '|  | |  ||  .-.  \  
 |  |    `.  `-. |  |       |  |       |  |    |  |   |  | |  ||  | |  ||  |  \  : 
 '  '--'\.-'    |'  '--'\   |  |       '  '--'\|  '--.'  '-'  ''  '-'  '|  '--'  / 
  `-----'`-----'  `-----'   `--'        `-----'`-----' `-----'  `-----' `-------'""")
-    print(Terminal.RESET, end="")
+    print(Terminal.RESET)
+    logger.debug("Running CSCT Cloud Quick Connect")
     logger.info("Connecting to CSCT Cloud")
 
     # Check we're running on Windows
@@ -258,8 +259,8 @@ def main() -> int:
         return 1
 
     logger.debug("Execution complete")
-    sleep(10)
 
+    sleep(10)  # just to keep terminal up for a moment after launch
     return 0
 
 
