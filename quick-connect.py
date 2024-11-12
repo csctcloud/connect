@@ -73,34 +73,37 @@ def isResourceAllowed(account: str) -> bool:
         else:
             return outputJSON["name"] == SERVER_RESOURCE_NAME
 
+    # TODO: work out what we might expect to need to handle
+    # * string failing to JSONify
+    # * resource name missing in account status
+
     except Exception as e:
-        logger.critical(f"Unexpected error occured checking tenant: {e}")
+        logger.critical(f"Unexpected error occured checking if user can use resource: {e}")
         showMessageBox(
             "There was a problem completing your login.\n\nPlease run the connection shortcut again and login with your UWE account when prompted."
         )
-        exit(1)
+        raise Exception(e) # re-raise
 
 
 def main() -> int:
     logger.debug("Running CSCT Cloud Quick Connect")
 
-    print(Terminal.BOLD + Terminal.BRIGHT_BLUE)
-    print(r"""                                                                                
- ,-----. ,---.   ,-----.,--------.     ,-----.,--.    ,-----. ,--. ,--.,------.   
+    print(Terminal.BOLD + Terminal.BRIGHT_BLUE, end="")
+    print(r""" ,-----. ,---.   ,-----.,--------.     ,-----.,--.    ,-----. ,--. ,--.,------.   
 '  .--./'   .-' '  .--./'--.  .--'    '  .--./|  |   '  .-.  '|  | |  ||  .-.  \  
 |  |    `.  `-. |  |       |  |       |  |    |  |   |  | |  ||  | |  ||  |  \  : 
 '  '--'\.-'    |'  '--'\   |  |       '  '--'\|  '--.'  '-'  ''  '-'  '|  '--'  / 
  `-----'`-----'  `-----'   `--'        `-----'`-----' `-----'  `-----' `-------'""")
-    print(Terminal.RESET)
+    print(Terminal.RESET, end="")
     logger.info("Connecting to CSCT Cloud")
 
     # Check we're running on Windows
     logger.debug(f"Current platform is {os.name}")
     if os.name != "nt":
-        logger.critical(
+        logger.error(
             "This script is designed to run on Windows based machines, it cannot be run on other platforms"
         )
-        exit(1)
+        return 1
 
     needLogin = False
 
