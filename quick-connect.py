@@ -121,8 +121,8 @@ def main() -> int:
 
     # Check if an azure account is already logged in
     logger.debug("Checking azure account status")
-    output = run_subprocess(["az", "account", "show"])
-    if output.returncode == 1:
+    account = run_subprocess(["az", "account", "show"])
+    if account.returncode == 1:
         logger.debug("No azure user account currently logged in")
         need_login = True
 
@@ -130,7 +130,7 @@ def main() -> int:
         logger.debug("An azure user account is currently logged in")
 
         # Check if azure account is able to access resource
-        if not check_resource_allowed(output.stdout):
+        if not check_resource_allowed(account.stdout):
             logger.warning(
                 "Currently logged in azure user account is not allowed access to this resource"
             )
@@ -143,11 +143,11 @@ def main() -> int:
         logger.debug("Running azure login flow")
         run_subprocess(["az", "config", "set", "core.login_experience_v2=off"])
         logger.info(
-            "Login required, please login to your UWE account in the browser window which opens"
+            "Login required, please login to your UWE account in the browser window that has just opened"
         )
-        output = run_subprocess(["az", "login"])
+        login = run_subprocess(["az", "login"])
 
-        if output.returncode == 1:
+        if login.returncode == 1:
             logger.error(
                 "Login flow failed, this normally indicates an error with the actual login process (user exited login flow, entered an incorrect password or failed MFA check)"
             )
@@ -160,7 +160,7 @@ def main() -> int:
 
         # Check if azure account is able to access resource
         logger.debug("Checking if account is allowed access to this resource")
-        if not check_resource_allowed(output.stdout):
+        if not check_resource_allowed(login.stdout):
             logger.error(
                 "Logged in account is not allowed access to this resource, this either means the user completed the login flow with a non-UWE account, or their UWE account does not have access to the server"
             )
