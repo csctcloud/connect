@@ -12,6 +12,8 @@ from time import sleep
 SERVER_RESOURCE_NAME = "CSCT Cloud Programming"
 SERVER_ADDRESS = "csctcloud.uwe.ac.uk"
 
+logger = logging.getLogger(__name__)
+
 
 class Terminal:
     RESET = "\033[0m"
@@ -53,49 +55,58 @@ class TerminalFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-logger = logging.getLogger("CSCTCLOUD-QC")
+def print_header() -> None:
+    print(Terminal.BOLD + Terminal.BRIGHT_BLUE, end="")
+    print(
+        r" ,-----. ,---.   ,-----.,--------.     ,-----.,--.    ,-----. ,--. ,--.,------. "
+    )
+    print(
+        r"'  .--./'   .-' '  .--./'--.  .--'    '  .--./|  |   '  .-.  '|  | |  ||  .-.  \ "
+    )
+    print(
+        r"|  |    `.  `-. |  |       |  |       |  |    |  |   |  | |  ||  | |  ||  |  \  : "
+    )
+    print(
+        r"'  '--'\.-'    |'  '--'\   |  |       '  '--'\|  '--.'  '-'  ''  '-'  '|  '--'  / "
+    )
+    print(
+        r" `-----'`-----'  `-----'   `--'        `-----'`-----' `-----'  `-----' `-------' "
+    )
+    print(Terminal.RESET)
 
 
-def runSubprocess(cmd: list[str]) -> subprocess.CompletedProcess:
+def run_subprocess(cmd: list[str]) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
 
-def showMessageBox(message: str, title: str = "CSCT Cloud Connection Error") -> None:
+def message_box(message: str, title: str = "CSCT Cloud Connection Error") -> None:
     ctypes.windll.user32.MessageBoxExW(None, message, title, 0x40000)
 
 
-def isResourceAllowed(account: str) -> bool:
+def check_resource_allowed(account: str) -> bool:
     try:
-        outputJSON = json.loads(account)
-        if isinstance(outputJSON, list):
-            resources = list(map(lambda t: t["name"], outputJSON))
+        output = json.loads(account)
+        if isinstance(output, list):
+            resources = list(map(lambda t: t["name"], output))
             return SERVER_RESOURCE_NAME in resources
         else:
-            return outputJSON["name"] == SERVER_RESOURCE_NAME
+            return output["name"] == SERVER_RESOURCE_NAME
 
     # TODO: work out what we might expect to need to handle
     # * string failing to JSONify
     # * resource name missing in account status
+    # in any case - all of these would result in us needing to exit so will
+    # work the same as it does currently
 
     except Exception as e:
-        logger.critical(
-            f"Unexpected error occured checking if user can use resource: {e}"
-        )
-        showMessageBox(
+        message_box(
             "There was a problem completing your login.\n\nPlease run the connection shortcut again and login with your UWE account when prompted."
         )
-        raise Exception(e)  # re-raise
+        raise e
 
 
 def main() -> int:
-    print(Terminal.BOLD + Terminal.BRIGHT_BLUE, end="")
-    print(r""" ,-----. ,---.   ,-----.,--------.     ,-----.,--.    ,-----. ,--. ,--.,------.   
-'  .--./'   .-' '  .--./'--.  .--'    '  .--./|  |   '  .-.  '|  | |  ||  .-.  \  
-|  |    `.  `-. |  |       |  |       |  |    |  |   |  | |  ||  | |  ||  |  \  : 
-'  '--'\.-'    |'  '--'\   |  |       '  '--'\|  '--.'  '-'  ''  '-'  '|  '--'  / 
- `-----'`-----'  `-----'   `--'        `-----'`-----' `-----'  `-----' `-------'""")
-    print(Terminal.RESET)
-    logger.debug("Running CSCT Cloud Quick Connect")
+    print_header()
     logger.info("Connecting to CSCT Cloud")
 
     # Check we're running on Windows
@@ -106,56 +117,54 @@ def main() -> int:
         )
         return 1
 
-    needLogin = False
+    need_login = False
 
-    # Check if an Azure token already exists
+    # Check if an azure account is already logged in
     logger.debug("Checking azure account status")
-    output = runSubprocess(["az", "account", "show"])
+    output = run_subprocess(["az", "account", "show"])
     if output.returncode == 1:
         logger.debug("No azure user account currently logged in")
-        needLogin = True
+        need_login = True
 
     else:
         logger.debug("An azure user account is currently logged in")
 
-        # Check if token valid for UWE tenant
-        if not isResourceAllowed(output.stdout):
+        # Check if azure account is able to access resource
+        if not check_resource_allowed(output.stdout):
             logger.warning(
                 "Currently logged in azure user account is not allowed access to this resource"
             )
-            needLogin = True
+            need_login = True
         else:
             logger.info("Azure account is allowed access to this resource")
 
-    # If login required, call az login
-    if needLogin:
+    # If login required, start the azure login flow
+    if need_login:
         logger.debug("Running azure login flow")
-        runSubprocess(["az", "config", "set", "core.login_experience_v2=off"])
+        run_subprocess(["az", "config", "set", "core.login_experience_v2=off"])
         logger.info(
-            "Login required, please login to your UWE account in the browser window which has just opened"
+            "Login required, please login to your UWE account in the browser window which opens"
         )
-        output = runSubprocess(["az", "login"])
+        output = run_subprocess(["az", "login"])
 
         if output.returncode == 1:
             logger.error(
                 "Login flow failed, this normally indicates an error with the actual login process (user exited login flow, entered an incorrect password or failed MFA check)"
             )
-            showMessageBox(
+            message_box(
                 "There was a problem with your login.\n\nPlease run the connection shortcut again and login with your UWE account when prompted."
             )
             return 1
 
         logger.info("Azure account logged in")
 
-        # Check resource listed in account
-        # TODO: not sure if there will be accounts that return more than one tenant
-        # will we need to catch these and then specify tenant to use?
+        # Check if azure account is able to access resource
         logger.debug("Checking if account is allowed access to this resource")
-        if not isResourceAllowed(output.stdout):
+        if not check_resource_allowed(output.stdout):
             logger.error(
                 "Logged in account is not allowed access to this resource, this either means the user completed the login flow with a non-UWE account, or their UWE account does not have access to the server"
             )
-            showMessageBox(
+            message_box(
                 "The account you have used to login is not a UWE account, or your UWE account is not allowed access to this resource.\n\nPlease run the connection shortcut again and login with your UWE account when prompted."
             )
             return 1
@@ -164,15 +173,15 @@ def main() -> int:
 
     # Check if SSH extension installed (and install if not)
     logger.debug("Checking if SSH extension is available")
-    checkExtension = runSubprocess(["az", "extension", "show", "--name", "ssh"])
-    if checkExtension.returncode == 1:
+    show_extension = run_subprocess(["az", "extension", "show", "--name", "ssh"])
+    if show_extension.returncode == 1:
         logger.warning("SSH extension not available - adding it now")
-        addExtension = runSubprocess(["az", "extension", "add", "--name", "ssh"])
-        if addExtension.returncode == 1:
+        add_extension = run_subprocess(["az", "extension", "add", "--name", "ssh"])
+        if add_extension.returncode == 1:
             logger.critical(
-                f"An error occurred adding the SSH extension: {addExtension.stderr}"
+                f"An error occurred adding the SSH extension: {add_extension.stderr}"
             )
-            showMessageBox(
+            message_box(
                 "There was an unexpected error while adding the SSH extension.\n\nPlease try running the connection shortcut again."
             )
             return 1
@@ -182,12 +191,12 @@ def main() -> int:
         logger.info("SSH extension available")
 
     # Check if .ssh folder exists for user
-    sshDirectory = pathlib.Path.home() / ".ssh"
-    logger.info(f"SSH config directory is {sshDirectory}")
+    ssh_directory = pathlib.Path.home() / ".ssh"
+    logger.info(f"SSH config directory is {ssh_directory}")
     logger.debug("Checking if user's SSH config directory exists")
-    if not sshDirectory.exists():
+    if not ssh_directory.exists():
         logger.warning("SSH config directory doesn't currently exist")
-        sshDirectory.mkdir()
+        ssh_directory.mkdir()
         logger.info("SSH config directory created")
 
     else:
@@ -195,12 +204,12 @@ def main() -> int:
         logger.debug(
             "SSH config directory exists, checking if CSCTCloud key directory exists"
         )
-        keyDirectory = sshDirectory / "csctcloud"
-        logger.info(f"CSCT Cloud key directory is {keyDirectory}")
+        key_directory = ssh_directory / "csctcloud"
+        logger.info(f"CSCT Cloud key directory is {key_directory}")
 
-        if keyDirectory.exists():
+        if key_directory.exists():
             logger.debug("CSCT Cloud key directory exists, clearing contents")
-            for root, dirs, files in keyDirectory.walk(top_down=False):
+            for root, dirs, files in key_directory.walk(top_down=False):
                 for name in files:
                     (root / name).unlink()
                 for name in dirs:
@@ -211,8 +220,8 @@ def main() -> int:
 
     # Generate SSH keys and certificate
     logger.debug("Generating SSH keys")
-    sshConfig = sshDirectory / "config"
-    createKeys = runSubprocess(
+    ssh_config = ssh_directory / "config"
+    create_keys = run_subprocess(
         [
             "az",
             "ssh",
@@ -221,23 +230,23 @@ def main() -> int:
             SERVER_ADDRESS,
             "--overwrite",
             "--file",
-            sshConfig,
+            ssh_config,
             "--keys-destination-folder",
-            keyDirectory,
+            key_directory,
         ]
     )
 
-    if createKeys.returncode == 1:
-        logger.critical(f"Creating keys failed: {createKeys.stderr}")
-        showMessageBox(
+    if create_keys.returncode == 1:
+        logger.critical(f"Creating keys failed: {create_keys.stderr}")
+        message_box(
             "There was an unexpected error while creating SSH keys.\n\nPlease try running the connection shortcut again."
         )
         return 1
 
     # note: for some reason the output from this call comes in stderr even when returncode is successful
-    expiry = re.search(r"valid until (.*) in local time", createKeys.stderr)
-    if expiry:
-        valid = expiry.group(1)
+    expiry_time = re.search(r"valid until (.*) in local time", create_keys.stderr)
+    if expiry_time:
+        valid = expiry_time.group(1)
         logger.info(f"Generated SSH keys, certificate is valid until {valid}")
     else:
         logger.warning(
@@ -246,14 +255,14 @@ def main() -> int:
 
     # Launch Visual Studio Code with remote target
     logger.debug("Launching Visual Studio Code")
-    vscode = runSubprocess(["code", "-n", "--remote", f"ssh-remote+{SERVER_ADDRESS}"])
+    vscode = run_subprocess(["code", "-n", "--remote", f"ssh-remote+{SERVER_ADDRESS}"])
     if vscode.returncode == 0:
         logger.info(
             f"Visual Studio Code launched with remote connection to {SERVER_ADDRESS}"
         )
     else:
         logger.critical(f"Failed to launch Visual Studio Code: {vscode.stderr}")
-        showMessageBox(
+        message_box(
             "An unknown error occurred while launching Visual Studio Code.\n\nPlease try running the connection shortcut again."
         )
         return 1
@@ -295,8 +304,8 @@ if __name__ == "__main__":
     logger.addHandler(stream)
 
     try:
-        exitCode = main()
-        exit(exitCode)
+        exit_code = main()
+        exit(exit_code)
 
     except Exception as e:
         logger.critical(f"Unexpected exception: {e}")
