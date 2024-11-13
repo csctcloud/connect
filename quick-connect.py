@@ -42,8 +42,8 @@ class TerminalFormatter(logging.Formatter):
         logging.DEBUG: f"[{Terminal.BOLD}{Terminal.BRIGHT_BLUE}*{Terminal.RESET}] {message}",
         logging.INFO: f"[{Terminal.BOLD}{Terminal.BRIGHT_GREEN}*{Terminal.RESET}] {message}",
         logging.WARNING: f"[{Terminal.BOLD}{Terminal.BRIGHT_YELLOW}!{Terminal.RESET}] {message}",
-        logging.ERROR: f"[{Terminal.BOLD}{Terminal.BRIGHT_MAGENTA}!{Terminal.RESET}] {message}",
-        logging.CRITICAL: f"[{Terminal.BOLD}{Terminal.BRIGHT_RED}!{Terminal.RESET}] {message}",
+        logging.ERROR: f"[{Terminal.BOLD}{Terminal.BRIGHT_RED}!{Terminal.RESET}] {message}",
+        logging.CRITICAL: f"[{Terminal.BOLD}{Terminal.BRIGHT_MAGENTA}!{Terminal.RESET}] {message}",
     }
 
     def format(self, record: logging.LogRecord) -> str:
@@ -138,7 +138,7 @@ def main() -> int:
 
         if output.returncode == 1:
             logger.error(
-                "Login flow failed, this normally indicates an error with the actual login process (user entered incorrect password or failed MFA check)"
+                "Login flow failed, this normally indicates an error with the actual login process (user exited login flow, entered an incorrect password or failed MFA check)"
             )
             showMessageBox(
                 "There was a problem with your login.\n\nPlease run the connection shortcut again and login with your UWE account when prompted."
@@ -166,7 +166,7 @@ def main() -> int:
     logger.debug("Checking if SSH extension is available")
     checkExtension = runSubprocess(["az", "extension", "show", "--name", "ssh"])
     if checkExtension.returncode == 1:
-        logger.warning("SSH extension not currently available")
+        logger.warning("SSH extension not available - adding it now")
         addExtension = runSubprocess(["az", "extension", "add", "--name", "ssh"])
         if addExtension.returncode == 1:
             logger.critical(
