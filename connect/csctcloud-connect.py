@@ -287,9 +287,10 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # logging level to terminal is INFO, but file handler will only log
-    # ERROR & higher messages unless otherwise specified in program arguments
-    logger.setLevel(logging.INFO)
+    # setting the maximum possible logging level to DEBUG - terminal handler is set
+    # to log INFO and above, file handler will only log ERROR and above unless
+    # otherwise specified in program arguments
+    logger.setLevel(logging.DEBUG)
 
     file = logging.FileHandler(
         filename=pathlib.Path().home() / "csctcloud-quick-connect.log",
@@ -300,6 +301,7 @@ if __name__ == "__main__":
     logger.addHandler(file)
 
     stream = logging.StreamHandler(sys.stdout)
+    stream.setLevel(logging.INFO)
     stream.setFormatter(TerminalFormatter())
     logger.addHandler(stream)
 
