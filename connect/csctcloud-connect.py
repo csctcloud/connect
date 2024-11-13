@@ -275,7 +275,7 @@ def main() -> int:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        prog="CSCT Cloud Quick Connect",
+        prog="CSCT Cloud Connect",
         description="Sets up an SSH configuration and necessary keys to establish a connection to the CSCT Cloud server, using the Azure CLI tools",
     )
     parser.add_argument(
@@ -293,7 +293,7 @@ if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
 
     file = logging.FileHandler(
-        filename=pathlib.Path().home() / "csctcloud-quick-connect.log",
+        filename=pathlib.Path().home() / "csctcloud-connect.log",
         encoding="utf-8",
     )
     file.setLevel(getattr(logging, args.log.upper(), logging.ERROR))
