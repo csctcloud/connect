@@ -119,14 +119,14 @@ def main() -> int:
         return 1
 
     # Check if azure CLI tools installed
-    # logger.debug("Checking azure tools installed")
-    # tools = run_subprocess(["az"])
-    # if tools.returncode == 1:
-    #     logger.error("Azure CLI tools need to be installed")
-    #     return 1
+    logger.debug("Checking azure tools installed")
+    tools = run_subprocess(["az"])
+    if tools.returncode == 1:
+        logger.error("Azure CLI tools need to be installed")
+        return 1
 
-    # else:
-    #     logger.debug("Azure CLI tools installed")
+    else:
+        logger.debug("Azure CLI tools installed")
 
     need_login = False
 
