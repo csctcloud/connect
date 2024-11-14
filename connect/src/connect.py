@@ -106,7 +106,7 @@ def check_resource_allowed(account: str) -> bool:
         raise e
 
 
-def main() -> int:
+def main(args: argparse.Namespace) -> int:
     print_header()
     logger.info(f"CSCT Cloud Connect (v{__VERSION__})")
 
@@ -232,19 +232,22 @@ def main() -> int:
     # Generate SSH keys and certificate
     logger.debug("Generating SSH keys")
     ssh_config = ssh_directory / "config"
-    create_keys = run_subprocess(
-        [
-            "az",
-            "ssh",
-            "config",
-            "--ip",
-            SERVER_ADDRESS,
-            "--file",
-            ssh_config,
-            "--keys-destination-folder",
-            key_directory,
-        ]
-    )
+    cmd = [
+        "az",
+        "ssh",
+        "config",
+        "--ip",
+        SERVER_ADDRESS,
+        "--file",
+        ssh_config,
+        "--keys-destination-folder",
+        key_directory,
+    ]
+
+    if not args.no_overwrite:
+        cmd.append("--overwrite")
+
+    create_keys = run_subprocess(cmd)
 
     if create_keys.returncode == 1:
         logger.critical(f"Creating keys failed: {create_keys.stderr}")
@@ -294,6 +297,13 @@ if __name__ == "__main__":
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         help="log level to run program under",
     )
+    parser.add_argument(
+        "-n",
+        "--no-overwrite",
+        default=False,
+        action="store_true",
+        help="prevent SSH configuration file being overwritten",
+    )
     args = parser.parse_args()
 
     # setting the maximum possible logging level to DEBUG - terminal handler is set
@@ -315,7 +325,7 @@ if __name__ == "__main__":
     logger.addHandler(stream)
 
     try:
-        exit_code = main()
+        exit_code = main(args)
         sys.exit(exit_code)
 
     except Exception as e:
