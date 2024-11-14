@@ -239,7 +239,6 @@ def main() -> int:
             "config",
             "--ip",
             SERVER_ADDRESS,
-            "--overwrite",
             "--file",
             ssh_config,
             "--keys-destination-folder",
