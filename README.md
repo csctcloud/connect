@@ -1,9 +1,12 @@
 # CSCT Cloud
-## Quick Connect
-Current WIP to quickly setup an SSH connection to the server, using `az ssh config` to generate the necessary SSH config and SSH key (and install it on the server) in one step.
+## Connect
+A python script for Windows machines to bootstrap a connection to the server using the Azure CLI tools to login a user and generate SSH keys.
+
+Can be built into a standalone executable for easier distribution to campus machines.
+
+For troubleshooting, a logfile (`csctcloud-connect.log`) is created in the users home directory.
 
 Issues:
-* Currently needs a login every time -- any way to check if token issued via Azure CLI?
 * Certificate is only issued for an hour -- ideally would be issued for remainder of token life (or configurable) -- [Github Issue](https://github.com/Azure/azure-cli-extensions/issues/3565)
 
 ## Troubleshooting
