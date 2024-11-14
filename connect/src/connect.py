@@ -244,7 +244,7 @@ def main(args: argparse.Namespace) -> int:
         key_directory,
     ]
 
-    if not args.no_overwrite:
+    if args.overwrite:
         cmd.append("--overwrite")
 
     create_keys = run_subprocess(cmd)
@@ -298,8 +298,8 @@ if __name__ == "__main__":
         help="log level to run program under",
     )
     parser.add_argument(
-        "-n",
-        "--no-overwrite",
+        "-o",
+        "--overwrite",
         default=False,
         action="store_true",
         help="prevent SSH configuration file being overwritten",
