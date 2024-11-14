@@ -119,14 +119,14 @@ def main() -> int:
         return 1
 
     # Check if azure CLI tools installed
-    logger.debug("Checking azure tools installed")
-    tools = run_subprocess(["az"])
-    if tools.returncode == 1:
-        logger.error("Azure CLI tools need to be installed")
-        return 1
+    # logger.debug("Checking azure tools installed")
+    # tools = run_subprocess(["az"])
+    # if tools.returncode == 1:
+    #     logger.error("Azure CLI tools need to be installed")
+    #     return 1
 
-    else:
-        logger.debug("Azure CLI tools installed")
+    # else:
+    #     logger.debug("Azure CLI tools installed")
 
     need_login = False
 
@@ -305,12 +305,12 @@ if __name__ == "__main__":
         filename=pathlib.Path().home() / "csctcloud-connect.log",
         encoding="utf-8",
     )
-    file.setLevel(getattr(logging, args.log.upper(), logging.ERROR))
+    file.setLevel((getattr(logging, args.log) if args.log else logging.ERROR))
     file.setFormatter(logging.Formatter("%(asctime)s:%(levelname)s:%(message)s"))
     logger.addHandler(file)
 
     stream = logging.StreamHandler(sys.stdout)
-    stream.setLevel(getattr(logging, args.log.upper(), logging.INFO))
+    stream.setLevel((getattr(logging, args.log) if args.log else logging.INFO))
     stream.setFormatter(TerminalFormatter())
     logger.addHandler(stream)
 
