@@ -293,7 +293,6 @@ if __name__ == "__main__":
         "-l",
         "--log",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        default="ERROR",
         help="log level to run program under",
     )
     args = parser.parse_args()
@@ -312,7 +311,7 @@ if __name__ == "__main__":
     logger.addHandler(file)
 
     stream = logging.StreamHandler(sys.stdout)
-    stream.setLevel(logging.INFO)
+    stream.setLevel(getattr(logging, args.log.upper(), logging.INFO))
     stream.setFormatter(TerminalFormatter())
     logger.addHandler(stream)
 
