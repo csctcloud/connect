@@ -9,7 +9,7 @@ import subprocess
 import sys
 from time import sleep
 
-__VERSION__ = "1.0"
+__VERSION__ = "1.0a"
 SERVER_RESOURCE_NAME = "CSCT Cloud Programming"
 SERVER_ADDRESS = "csctcloud.uwe.ac.uk"
 
