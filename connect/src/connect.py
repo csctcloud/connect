@@ -9,7 +9,7 @@ import subprocess
 import sys
 from time import sleep
 
-__VERSION__ = "1.0a"
+__VERSION__ = "1.0b"
 SERVER_RESOURCE_NAME = "CSCT Cloud Programming"
 SERVER_ADDRESS = "csctcloud.uwe.ac.uk"
 
@@ -57,6 +57,9 @@ class TerminalFormatter(logging.Formatter):
 
 
 def print_header() -> None:
+    os.system(
+        ""
+    )  # this fixes ANSI escape sequences not displaying properly on some builds
     print(Terminal.BOLD + Terminal.BRIGHT_BLUE, end="")
     print(
         r" ,-----. ,---.   ,-----.,--------.     ,-----.,--.    ,-----. ,--. ,--.,------. "
