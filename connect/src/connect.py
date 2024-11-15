@@ -203,6 +203,8 @@ def main(args: argparse.Namespace) -> int:
 
     # Check if .ssh folder exists for user
     ssh_directory = pathlib.Path.home() / ".ssh"
+    key_directory = ssh_directory / "csctcloud"
+
     logger.info(f"SSH config directory is {ssh_directory}")
     logger.debug("Checking if user's SSH config directory exists")
     if not ssh_directory.exists():
@@ -215,7 +217,6 @@ def main(args: argparse.Namespace) -> int:
         logger.debug(
             "SSH config directory exists, checking if CSCTCloud key directory exists"
         )
-        key_directory = ssh_directory / "csctcloud"
         logger.info(f"CSCT Cloud key directory is {key_directory}")
 
         if key_directory.exists():
