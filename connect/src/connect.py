@@ -302,7 +302,7 @@ if __name__ == "__main__":
         "--overwrite",
         default=False,
         action="store_true",
-        help="prevent SSH configuration file being overwritten",
+        help="allow SSH configuration file to be overwritten",
     )
     args = parser.parse_args()
 
