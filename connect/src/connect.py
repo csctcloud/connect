@@ -57,9 +57,6 @@ class TerminalFormatter(logging.Formatter):
 
 
 def print_header() -> None:
-    os.system(
-        ""
-    )  # this fixes ANSI escape sequences not displaying properly on some builds
     print(Terminal.BOLD + Terminal.BRIGHT_BLUE, end="")
     print(
         r" ,-----. ,---.   ,-----.,--------.     ,-----.,--.    ,-----. ,--. ,--.,------. "
@@ -110,6 +107,9 @@ def check_resource_allowed(account: str) -> bool:
 
 
 def main(args: argparse.Namespace) -> int:
+    # this fixes ANSI escape sequences not displaying properly on some builds
+    os.system("")
+
     print_header()
     logger.info(f"CSCT Cloud Connect (v{__VERSION__})")
 
