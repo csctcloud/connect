@@ -47,3 +47,10 @@ Temporarily change Anaconda directory to prevent conflict during extension insta
 * Change: `C:/Users/<username>/anaconda3` to `C:/Users/<username>/anaconda3_temp`
 * Retry ssh extension installation `az ssh ...`
 * Revert anaconda3 directory name back to original
+
+### Python import error when running some `az` calls (just Windows?)
+*ModuleNotFoundError: No module named 'rpds.rpds'* -- seems to be caused by old python libraries kicking about?
+
+* Remove existing SSH extension: `az extension remove --name ssh`
+* Re-run connection command: `az ssh vm --ip <server>`
+* Install SSH extension if prompted
