@@ -22,6 +22,18 @@ Issues:
 * Certificate is only issued for an hour -- ideally would be issued for remainder of token life (or configurable) -- [Github Issue](https://github.com/Azure/azure-cli-extensions/issues/3565)
 
 ## Troubleshooting
+### raygui webpage refuses to load
+Web page refuses to load at all on a specific machine (but can be loaded on a different machine by manually forwarding the port)
+
+Can verify issue by trying to open the web page with cURL - will see the request fail with bytes unread (ERR_CONTENT_LENGTH_MISMATCH).
+
+* Open settings and search for `remote.ssh.useExecServer` and untick (setting it to false)
+* Restart vscode
+* Try again
+
+[Github issue](https://github.com/microsoft/vscode-remote-release/issues/9548)
+
+
 ### Permission denied (publickey)
 If an SSH config exists (it'll be created when they first setup a connection through vscode), open it up and check:
 * User is their full UWE email address (including host portion), spelt correctly, all in lowercase
