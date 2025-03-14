@@ -33,7 +33,6 @@ Can verify issue by trying to open the web page with cURL - will see the request
 
 [Github issue](https://github.com/microsoft/vscode-remote-release/issues/9548)
 
-
 ### Permission denied (publickey)
 If an SSH config exists (it'll be created when they first setup a connection through vscode), open it up and check:
 * User is their full UWE email address (including host portion), spelt correctly, all in lowercase
@@ -59,3 +58,10 @@ Temporarily change Anaconda directory to prevent conflict during extension insta
 * Change: `C:/Users/<username>/anaconda3` to `C:/Users/<username>/anaconda3_temp`
 * Retry ssh extension installation `az ssh ...`
 * Revert anaconda3 directory name back to original
+
+### `az ssh` extension stops working after update
+After updating, ssh extension stops working ("no module named 'rpds.rpds'")
+
+Reinstall ssh extension: `az extension remove -n ssh && az extension add -n ssh"`
+
+[Github issue](https://github.com/Azure/azure-cli/issues/31017)
