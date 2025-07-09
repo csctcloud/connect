@@ -51,7 +51,7 @@ class TerminalFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         formatter = logging.Formatter(
-            self.FORMATS.get(record.levelno, logging.CRITICAL)
+            self.FORMATS.get(record.levelno, self.FORMATS.get(logging.CRITICAL))
         )
         return formatter.format(record)
 
