@@ -4,11 +4,8 @@ import json
 import logging
 import os
 import pathlib
-
-# import re
 import subprocess
 import sys
-from time import sleep
 
 __VERSION__ = "1.1"
 SERVER_RESOURCE_NAME = "CSCT Cloud Programming"
@@ -284,23 +281,39 @@ def main(args: argparse.Namespace) -> int:
     #         "Generated SSH keys but couldn't extract expiry time from output"
     #     )
 
-    # Launch Visual Studio Code with remote target
-    logger.debug("Launching Visual Studio Code")
-    vscode = run_subprocess(["code", "-n", "--remote", f"ssh-remote+{SERVER_ADDRESS}"])
-    if vscode.returncode == 0:
-        logger.info(
-            f"Visual Studio Code launched with remote connection to {SERVER_ADDRESS}"
+    # Test Visual Studio Code installed
+    logger.debug("Test if Visual Studio Code is available")
+    test_vscode = run_subprocess(["code", "-v"])
+    if test_vscode.returncode == 0:
+        # Launch Visual Studio Code with remote target
+        logger.debug("Launching Visual Studio Code")
+        vscode = run_subprocess(
+            ["code", "-n", "--remote", f"ssh-remote+{SERVER_ADDRESS}"]
         )
+        if vscode.returncode == 0:
+            logger.info(
+                f"Visual Studio Code launched with remote connection to {SERVER_ADDRESS}"
+            )
+        else:
+            logger.critical(f"Failed to launch Visual Studio Code: {vscode.stderr}")
+            message_box(
+                "An unknown error occurred while launching Visual Studio Code.\n\nPlease try running the connection shortcut again."
+            )
+            return 1
+
     else:
-        logger.critical(f"Failed to launch Visual Studio Code: {vscode.stderr}")
-        message_box(
-            "An unknown error occurred while launching Visual Studio Code.\n\nPlease try running the connection shortcut again."
+        terminal = (
+            "Command Prompt/Windows Powershell" if os.name == "nt" else "terminal"
         )
-        return 1
+        logger.warning("Visual Studio Code is not installed")
+        logger.info(
+            f"You can now connect to the server by opening a {terminal} window and entering {Terminal.BOLD}{Terminal.YELLOW}ssh {SERVER_ADDRESS}{Terminal.RESET}"
+        )
 
     logger.debug("Execution complete")
 
-    sleep(10)  # just to keep terminal up for a moment after launch
+    print("\nPress enter to exit...")
+    input()
     return 0
 
 
