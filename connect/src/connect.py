@@ -4,7 +4,8 @@ import json
 import logging
 import os
 import pathlib
-import re
+
+# import re
 import subprocess
 import sys
 from time import sleep
@@ -112,14 +113,6 @@ def main(args: argparse.Namespace) -> int:
 
     print_header()
     logger.info(f"CSCT Cloud Connect (v{__VERSION__})")
-
-    # Check we're running on Windows
-    logger.debug(f"Current platform is {os.name}")
-    if os.name != "nt":
-        logger.error(
-            "This script is designed to run on Windows based machines, it cannot be run on other platforms"
-        )
-        return 1
 
     # Check if azure CLI tools installed
     logger.debug("Checking azure tools installed")
@@ -279,17 +272,17 @@ def main(args: argparse.Namespace) -> int:
             f.write(f"{include}\n\n")
             logger.debug(f"Created {ssh_config}")
 
-    # Retrieve key certificate expiry -- do we need to do this? could store time and only regenerate keys
-    # if time has been exceeded?
-    # note: for some reason the output from this call comes in stderr even when returncode is successful
-    expiry_time = re.search(r"valid until (.*) in local time", create_keys.stderr)
-    if expiry_time:
-        valid = expiry_time.group(1)
-        logger.info(f"Generated SSH keys, certificate is valid until {valid}")
-    else:
-        logger.warning(
-            "Generated SSH keys but couldn't extract expiry time from output"
-        )
+    # # Retrieve key certificate expiry -- do we need to do this? could store time and only regenerate keys
+    # # if time has been exceeded?
+    # # note: for some reason the output from this call comes in stderr even when returncode is successful
+    # expiry_time = re.search(r"valid until (.*) in local time", create_keys.stderr)
+    # if expiry_time:
+    #     valid = expiry_time.group(1)
+    #     logger.info(f"Generated SSH keys, certificate is valid until {valid}")
+    # else:
+    #     logger.warning(
+    #         "Generated SSH keys but couldn't extract expiry time from output"
+    #     )
 
     # Launch Visual Studio Code with remote target
     logger.debug("Launching Visual Studio Code")
