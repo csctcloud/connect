@@ -129,7 +129,7 @@ def check_resource_allowed(account: str) -> bool:
         raise e
 
 
-def main(args: argparse.Namespace) -> int:
+def main() -> int:
     # this fixes ANSI escape sequences not displaying properly on some builds
     os.system("")
 
@@ -294,18 +294,6 @@ def main(args: argparse.Namespace) -> int:
             f.write(include)
             logger.debug(f"Created {ssh_config}")
 
-    # # Retrieve key certificate expiry -- do we need to do this? could store time and only regenerate keys
-    # # if time has been exceeded?
-    # # note: for some reason the output from this call comes in stderr even when returncode is successful
-    # expiry_time = re.search(r"valid until (.*) in local time", create_keys.stderr)
-    # if expiry_time:
-    #     valid = expiry_time.group(1)
-    #     logger.info(f"Generated SSH keys, certificate is valid until {valid}")
-    # else:
-    #     logger.warning(
-    #         "Generated SSH keys but couldn't extract expiry time from output"
-    #     )
-
     # Test Visual Studio Code installed
     logger.debug("Test if Visual Studio Code is available")
     test_vscode = run_subprocess(["code", "-v"])
@@ -378,8 +366,7 @@ if __name__ == "__main__":
     logger.addHandler(stream)
 
     try:
-        exit_code = main(args)
-        sys.exit(exit_code)
+        sys.exit(main())
 
     except Exception as e:
         logger.critical(f"Unexpected exception: {e}")
