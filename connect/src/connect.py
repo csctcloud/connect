@@ -80,11 +80,20 @@ def run_subprocess(cmd: list[str]) -> subprocess.CompletedProcess:
 
 def message_box(message: str, title: str = "CSCT Cloud Connection Error") -> None:
     try:
-        match os.name:
-            case "nt":
+        match sys.platform:
+            case "win32":  # Windows
                 ctypes.windll.user32.MessageBoxExW(None, message, title, 0x40000)
 
-            case _:
+            case "darwin":  # macOS
+                run_subprocess(
+                    [
+                        "osascript",
+                        "-e",
+                        f'\'tell app "System Events" to display dialog "{message}"\'',
+                    ]
+                )
+
+            case _:  # catch-all
                 logger.error(message)
 
     except Exception:
@@ -311,9 +320,13 @@ def main(args: argparse.Namespace) -> int:
             return 1
 
     else:
-        terminal = (
-            "Command Prompt/Windows Powershell" if os.name == "nt" else "terminal"
-        )
+        match sys.platform:
+            case "win32":
+                terminal = "Command Prompt/Windows Powershell"
+
+            case _:
+                terminal = "terminal"
+
         logger.warning("Visual Studio Code is not installed")
         logger.info(
             f"You can now connect to the server by opening a {terminal} window and entering {Terminal.BOLD}{Terminal.YELLOW}ssh {SERVER_ADDRESS}{Terminal.RESET}"
