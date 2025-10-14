@@ -20,6 +20,8 @@ Can verify issue by trying to open the web page with cURL - will see the request
 
 [Github issue](https://github.com/microsoft/vscode-remote-release/issues/9548)
 
+**This sometimes happened when somebody else on the server was trying to use the same port - get them to re-run the port generating script and try again**
+
 ### Permission denied (publickey)
 If an SSH config exists (it'll be created when they first setup a connection through vscode), open it up and check:
 * User is their full UWE email address (including host portion), spelt correctly, all in lowercase
