@@ -270,7 +270,7 @@ def main(args: argparse.Namespace) -> int:
     logger.debug("SSH keys created")
 
     # Check if main SSH config exists/includes csctcloud config
-    include = f"Include {csctcloud_config}"
+    include = f"Include {csctcloud_config}\n"
     if ssh_config.exists():
         logger.debug("SSH config already exists")
         with open(ssh_config, "r") as f:
@@ -278,13 +278,13 @@ def main(args: argparse.Namespace) -> int:
             if include not in lines:
                 logger.debug("Adding include directive into it")
                 with open(ssh_config, "w") as fw:
-                    fw.write(f"{include}\n\n")
+                    fw.write(include)
                     fw.writelines(lines)
 
     else:
         logger.debug("SSH config doesn't exist, creating a new one")
         with open(ssh_config, "w") as f:
-            f.write(f"{include}\n\n")
+            f.write(include)
             logger.debug(f"Created {ssh_config}")
 
     # # Retrieve key certificate expiry -- do we need to do this? could store time and only regenerate keys
