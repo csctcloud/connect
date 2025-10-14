@@ -9,7 +9,7 @@ import subprocess
 import sys
 from time import sleep
 
-__VERSION__ = "2.0"
+__VERSION__ = "1.1"
 SERVER_RESOURCE_NAME = "CSCT Cloud Programming"
 SERVER_ADDRESS = "csctcloud.uwe.ac.uk"
 
@@ -321,13 +321,6 @@ if __name__ == "__main__":
         "--log",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
         help="log level to run program under",
-    )
-    parser.add_argument(
-        "-o",
-        "--overwrite",
-        default=False,
-        action="store_true",
-        help="allow SSH configuration file to be overwritten",
     )
     args = parser.parse_args()
 
