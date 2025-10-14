@@ -75,7 +75,12 @@ def print_header() -> None:
 
 
 def run_subprocess(cmd: list[str]) -> subprocess.CompletedProcess:
-    return subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    match sys.platform:
+        case "win32":
+            return subprocess.run(cmd, shell=True, capture_output=True, text=True)
+
+        case _:
+            return subprocess.run(cmd, capture_output=True, text=True)
 
 
 def message_box(message: str, title: str = "CSCT Cloud Connection Error") -> None:
