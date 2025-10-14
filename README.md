@@ -7,7 +7,7 @@ To remove it: `winget uninstall --exact --id Microsoft.AzureCLI`
 
 Then in a normal powershell window: `winget install --exact --id Microsoft.AzureCLI`
 
-`az` commands should then be runnable as a normal user
+If they had already added ssh extension then will need to remove it in admin powershell window (`az extension remove -n ssh`) then try reconnecting in a normal powershell window.
 
 ### raygui webpage refuses to load
 Web page refuses to load at all on a specific machine (but can be loaded on a different machine by manually forwarding the port)
