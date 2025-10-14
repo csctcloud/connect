@@ -79,7 +79,11 @@ def run_subprocess(cmd: list[str]) -> subprocess.CompletedProcess:
 
 
 def message_box(message: str, title: str = "CSCT Cloud Connection Error") -> None:
-    ctypes.windll.user32.MessageBoxExW(None, message, title, 0x40000)
+    try:
+        ctypes.windll.user32.MessageBoxExW(None, message, title, 0x40000)
+
+    except Exception:
+        logger.error(message)
 
 
 def check_resource_allowed(account: str) -> bool:
