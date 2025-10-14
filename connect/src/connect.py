@@ -82,7 +82,7 @@ def message_box(message: str, title: str = "CSCT Cloud Connection Error") -> Non
     try:
         match sys.platform:
             case "win32":  # Windows
-                ctypes.windll.user32.MessageBoxExW(None, message, title, 0x40000)
+                ctypes.windll.user32.MessageBoxExW(None, message, title, 0x40000)  # type: ignore
 
             case "darwin":  # macOS
                 run_subprocess(
