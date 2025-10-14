@@ -94,9 +94,11 @@ def message_box(message: str, title: str = "CSCT Cloud Connection Error") -> Non
                 )
 
             case _:  # catch-all
+                message = message.replace("\n", " ")
                 logger.error(message)
 
     except Exception:
+        message = message.replace("\n", " ")
         logger.error(message)
 
 
