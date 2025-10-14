@@ -9,7 +9,7 @@ import subprocess
 import sys
 from time import sleep
 
-__VERSION__ = "1.0"
+__VERSION__ = "2.0"
 SERVER_RESOURCE_NAME = "CSCT Cloud Programming"
 SERVER_ADDRESS = "csctcloud.uwe.ac.uk"
 
@@ -204,9 +204,11 @@ def main(args: argparse.Namespace) -> int:
     else:
         logger.info("SSH extension available")
 
-    # Check if .ssh folder exists for user
+    # Check if .ssh directories/config exists for user
     ssh_directory = pathlib.Path.home() / ".ssh"
-    key_directory = ssh_directory / "csctcloud"
+    ssh_config = ssh_directory / "config"
+    csctcloud_directory = ssh_directory / "csctcloud"
+    csctcloud_config = csctcloud_directory / "config"
 
     logger.info(f"SSH config directory is {ssh_directory}")
     logger.debug("Checking if user's SSH config directory exists")
@@ -220,11 +222,11 @@ def main(args: argparse.Namespace) -> int:
         logger.debug(
             "SSH config directory exists, checking if CSCTCloud key directory exists"
         )
-        logger.info(f"CSCT Cloud key directory is {key_directory}")
+        logger.info(f"CSCT Cloud key directory is {csctcloud_directory}")
 
-        if key_directory.exists():
+        if csctcloud_directory.exists():
             logger.debug("CSCT Cloud key directory exists, clearing contents")
-            for root, dirs, files in key_directory.walk(top_down=False):
+            for root, dirs, files in csctcloud_directory.walk(top_down=False):
                 for name in files:
                     (root / name).unlink()
                 for name in dirs:
@@ -235,7 +237,6 @@ def main(args: argparse.Namespace) -> int:
 
     # Generate SSH keys and certificate
     logger.debug("Generating SSH keys")
-    ssh_config = ssh_directory / "config"
     cmd = [
         "az",
         "ssh",
@@ -243,13 +244,11 @@ def main(args: argparse.Namespace) -> int:
         "--ip",
         SERVER_ADDRESS,
         "--file",
-        ssh_config,
+        csctcloud_config,
         "--keys-destination-folder",
-        key_directory,
+        csctcloud_directory,
+        "--overwrite",
     ]
-
-    if args.overwrite:
-        cmd.append("--overwrite")
 
     create_keys = run_subprocess(cmd)
 
@@ -260,6 +259,28 @@ def main(args: argparse.Namespace) -> int:
         )
         return 1
 
+    logger.debug("SSH keys created")
+
+    # Check if main SSH config exists/includes csctcloud config
+    include = f"Include {csctcloud_config}"
+    if ssh_config.exists():
+        logger.debug("SSH config already exists")
+        with open(ssh_config, "r") as f:
+            lines = f.readlines()
+            if include not in lines:
+                logger.debug("Adding include directive into it")
+                with open(ssh_config, "w") as fw:
+                    fw.write(f"{include}\n\n")
+                    fw.writelines(lines)
+
+    else:
+        logger.debug("SSH config doesn't exist, creating a new one")
+        with open(ssh_config, "w") as f:
+            f.write(f"{include}\n\n")
+            logger.debug(f"Created {ssh_config}")
+
+    # Retrieve key certificate expiry -- do we need to do this? could store time and only regenerate keys
+    # if time has been exceeded?
     # note: for some reason the output from this call comes in stderr even when returncode is successful
     expiry_time = re.search(r"valid until (.*) in local time", create_keys.stderr)
     if expiry_time:
