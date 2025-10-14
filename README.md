@@ -3,9 +3,9 @@
 ### Azure CLI access denied
 Normally means they installed it using winget whilst still in Powershell as an administrator
 
-To remove it: `winget uninstall --exact --id Microsoft.AzureCLI`
+To remove it: `winget uninstall --exact --id Microsoft.AzureCLI` in an administrative powershell window.
 
-Then in a normal powershell window: `winget install --exact --id Microsoft.AzureCLI`
+Then in a normal powershell window: `winget install --exact --id Microsoft.AzureCLI`.
 
 If they had already added ssh extension then will need to remove it in admin powershell window (`az extension remove -n ssh`) then try reconnecting in a normal powershell window.
 
