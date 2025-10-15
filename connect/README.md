@@ -6,7 +6,7 @@ Can be built into a standalone executable for easier distribution to campus mach
 For troubleshooting, a logfile (`csctcloud-connect.log`) is created in the users home directory.
 
 ```
-usage: CSCT Cloud Connect [-h] [-l {DEBUG,INFO,WARNING,ERROR,CRITICAL}] [-o]
+usage: CSCT Cloud Connect [-h] [-l {DEBUG,INFO,WARNING,ERROR,CRITICAL}]
 
 Sets up an SSH configuration and necessary keys to establish a connection to the CSCT Cloud server, using the Azure CLI tools
 
@@ -14,7 +14,6 @@ options:
   -h, --help            show this help message and exit
   -l {DEBUG,INFO,WARNING,ERROR,CRITICAL}, --log {DEBUG,INFO,WARNING,ERROR,CRITICAL}
                         log level to run program under
-  -o, --overwrite       allow SSH configuration file to be overwritten
 ```
 
 Issues:
