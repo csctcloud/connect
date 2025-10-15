@@ -12,4 +12,4 @@ PyInstaller.__main__.run(
     ]
 )
 
-shutil.make_archive(f"connect_{__VERSION__}_{sys.platform}", "zip", "dist")
+shutil.make_archive(f"release/connect_{__VERSION__}_{sys.platform}", "zip", "dist")
