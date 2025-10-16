@@ -74,13 +74,18 @@ def print_header() -> None:
     print(Terminal.RESET)
 
 
-def run_subprocess(cmd: list[str]) -> subprocess.CompletedProcess:
-    match sys.platform:
-        case "win32":
-            return subprocess.run(cmd, shell=True, capture_output=True, text=True)
+def run_subprocess(cmd: list[str]) -> subprocess.CompletedProcess | None:
+    try:
+        match sys.platform:
+            case "win32":
+                return subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
-        case _:
-            return subprocess.run(cmd, capture_output=True, text=True)
+            case _:
+                return subprocess.run(cmd, capture_output=True, text=True)
+
+    except FileNotFoundError:
+        logger.debug(f"Missing command: {cmd[0]}")
+        return None
 
 
 def message_box(message: str, title: str = "CSCT Cloud Connection Error") -> None:
@@ -139,7 +144,7 @@ def main() -> int:
     # Check if azure CLI tools installed
     logger.debug("Checking azure tools installed")
     tools = run_subprocess(["az"])
-    if tools.returncode == 1:
+    if not tools or tools.returncode == 1:
         logger.error("Azure CLI tools need to be installed")
         return 1
 
@@ -151,7 +156,7 @@ def main() -> int:
     # Check if an azure account is already logged in
     logger.debug("Checking azure account status")
     account = run_subprocess(["az", "account", "show"])
-    if account.returncode == 1:
+    if account and account.returncode == 1:
         logger.debug("No azure user account currently logged in")
         need_login = True
 
@@ -159,7 +164,7 @@ def main() -> int:
         logger.debug("An azure user account is currently logged in")
 
         # Check if azure account is able to access resource
-        if not check_resource_allowed(account.stdout):
+        if account and not check_resource_allowed(account.stdout):
             logger.warning(
                 "Currently logged in azure user account is not allowed access to this resource"
             )
@@ -176,7 +181,7 @@ def main() -> int:
         )
         login = run_subprocess(["az", "login"])
 
-        if login.returncode == 1:
+        if login and login.returncode == 1:
             logger.error(
                 "Login flow failed, this normally indicates an error with the actual login process (user exited login flow, entered an incorrect password or failed MFA check)"
             )
@@ -189,7 +194,7 @@ def main() -> int:
 
         # Check if azure account is able to access resource
         logger.debug("Checking if account is allowed access to this resource")
-        if not check_resource_allowed(login.stdout):
+        if login and not check_resource_allowed(login.stdout):
             logger.error(
                 "Logged in account is not allowed access to this resource, this either means the user completed the login flow with a non-UWE account, or their UWE account does not have access to the server"
             )
@@ -203,10 +208,10 @@ def main() -> int:
     # Check if SSH extension installed (and install if not)
     logger.debug("Checking if SSH extension is available")
     show_extension = run_subprocess(["az", "extension", "show", "--name", "ssh"])
-    if show_extension.returncode == 1:
+    if show_extension and show_extension.returncode == 1:
         logger.warning("SSH extension not available - adding it now")
         add_extension = run_subprocess(["az", "extension", "add", "--name", "ssh"])
-        if add_extension.returncode == 1:
+        if add_extension and add_extension.returncode == 1:
             logger.critical(
                 f"An error occurred adding the SSH extension: {add_extension.stderr}"
             )
@@ -269,7 +274,7 @@ def main() -> int:
 
     create_keys = run_subprocess(cmd)
 
-    if create_keys.returncode == 1:
+    if create_keys and create_keys.returncode == 1:
         logger.critical(f"Creating keys failed: {create_keys.stderr}")
         message_box(
             "There was an unexpected error while creating SSH keys.\n\nPlease try running the connection shortcut again."
@@ -299,22 +304,23 @@ def main() -> int:
     # Test Visual Studio Code installed
     logger.debug("Test if Visual Studio Code is available")
     test_vscode = run_subprocess(["code", "-v"])
-    if test_vscode.returncode == 0:
+    if test_vscode and test_vscode.returncode == 0:
         # Launch Visual Studio Code with remote target
         logger.debug("Launching Visual Studio Code")
         vscode = run_subprocess(
             ["code", "-n", "--remote", f"ssh-remote+{SERVER_ADDRESS}"]
         )
-        if vscode.returncode == 0:
-            logger.info(
-                f"Visual Studio Code launched with remote connection to {SERVER_ADDRESS}"
-            )
-        else:
-            logger.critical(f"Failed to launch Visual Studio Code: {vscode.stderr}")
-            message_box(
-                "An unknown error occurred while launching Visual Studio Code.\n\nPlease try running the connection shortcut again."
-            )
-            return 1
+        if vscode:
+            if vscode.returncode == 0:
+                logger.info(
+                    f"Visual Studio Code launched with remote connection to {SERVER_ADDRESS}"
+                )
+            else:
+                logger.critical(f"Failed to launch Visual Studio Code: {vscode.stderr}")
+                message_box(
+                    "An unknown error occurred while launching Visual Studio Code.\n\nPlease try running the connection shortcut again."
+                )
+                return 1
 
     else:
         match sys.platform:
