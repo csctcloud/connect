@@ -249,6 +249,7 @@ def main() -> int:
             logger.debug("Contents of CSCT Cloud key directory cleared")
         else:
             logger.debug("CSCT Cloud key directory doesn't exist")
+            csctcloud_directory.mkdir()
 
     # Generate SSH keys and certificate
     logger.debug("Generating SSH keys")
