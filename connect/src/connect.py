@@ -330,7 +330,7 @@ def main() -> int:
             case _:
                 terminal = "terminal"
 
-        logger.warning("Visual Studio Code is not installed")
+        logger.debug("Visual Studio Code is not installed")
         logger.info(
             f"You can now connect to the server by entering {Terminal.BOLD}{Terminal.YELLOW}ssh {SERVER_ADDRESS}{Terminal.RESET} in a {terminal} window"
         )
