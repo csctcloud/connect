@@ -230,6 +230,7 @@ def main() -> int:
     if not ssh_directory.exists():
         logger.warning("SSH config directory doesn't currently exist")
         ssh_directory.mkdir()
+        csctcloud_directory.mkdir()
         logger.info("SSH config directory created")
 
     else:
