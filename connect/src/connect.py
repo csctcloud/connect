@@ -301,14 +301,23 @@ def main() -> int:
             f.write(include)
             logger.debug(f"Created {ssh_config}")
 
+    match sys.platform:
+        case "darwin":
+            vscode_path = (
+                "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+            )
+
+        case _:
+            vscode_path = "code"
+
     # Test Visual Studio Code installed
     logger.debug("Test if Visual Studio Code is available")
-    test_vscode = run_subprocess(["code", "-v"])
+    test_vscode = run_subprocess([vscode_path, "-v"])
     if test_vscode and test_vscode.returncode == 0:
         # Launch Visual Studio Code with remote target
         logger.debug("Launching Visual Studio Code")
         vscode = run_subprocess(
-            ["code", "-n", "--remote", f"ssh-remote+{SERVER_ADDRESS}"]
+            [vscode_path, "-n", "--remote", f"ssh-remote+{SERVER_ADDRESS}"]
         )
         if vscode:
             if vscode.returncode == 0:
