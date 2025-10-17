@@ -41,6 +41,9 @@ Get them to connect to the server using Azure CLI (`az login`):
 If in doubt just generate a new keypair and try copying that...
 
 ### Issue with installing Azure CLI SSH extension (`az ssh`)
+**This can also happen with other python conflicts**
+Run `$ENV:PYTHONPATH = "C:\\Program Files\\Microsoft SDKs\\Azure\\CLI2"` and then try installing the extension with `az extension add -n ssh`.
+
 Installation fails with pip error, running with --debug flag will show problem with winreg.XX function call (file not found). Issue is caused by conflicting Anaconda libraries being included by Azure CLI during extension install.
 
 Temporarily change Anaconda directory to prevent conflict during extension installation:
