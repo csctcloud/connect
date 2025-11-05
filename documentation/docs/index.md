@@ -8,7 +8,7 @@ Students taking a module that uses the server will automatically be given access
 
 If you don't have access to the server and think you should, talk to your module tutors - sometimes modules that should have access need to be re-added by IT Services.
 
-!!! warning
+!!! warning "Acceptable Use Policy"
     By logging onto the server, you acknowledge your obligation to familiarise yourself with and abide by the University’s Acceptable Use Policy. This Policy sets out the responsibilities and required behaviours for anyone who makes use of the IT facilities provided by UWE Bristol and is available from: [http://go.uwe.ac.uk/aup](http://go.uwe.ac.uk/aup).
 
 
