@@ -1,0 +1,4 @@
+site_name: CSCT Cloud
+site_url: htts://csctcloud.github.io
+theme:
+  name: material
