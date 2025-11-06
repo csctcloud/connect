@@ -43,8 +43,8 @@ user@uwe.ac.uk@csctcloud:~$
 If you're having problems connecting, or are receiving an error (`Permission denied (publickey)`) then you should follow the steps in the [troubleshooting guide](../troubleshooting/publickey.md). -->
 
 ## What next?
-If you're new to entering and running commands using a terminal, Linux Journey has some good tutorials on [using the command line](https://labex.io/lesson/the-shell) and [working with text](https://labex.io/lesson/stdout-standard-out-redirect).
+If you're new to entering and running commands using a terminal, Linux Journey has some good tutorials on [using the command line](https://labex.io/lesson/the-shell){:target="_blank"} and [working with text](https://labex.io/lesson/stdout-standard-out-redirect){:target="_blank"}.
 
-If you wanted, you could stop here and only work using the terminal and terminal based text editors like `nano`, `emacs` or `vim` - which is best is a [contentious topic](https://xkcd.com/378/)!
+If you wanted, you could stop here and only work using the terminal and terminal based text editors like `nano`, `emacs` or `vim` - which is best is a [contentious topic](https://xkcd.com/378/){:target="_blank"}!
 
 Most students will want to continue to the next page to setup Visual Studio Code to connect to the server however.

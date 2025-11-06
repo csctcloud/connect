@@ -12,7 +12,7 @@ az login
 This will open up an account selector or browser window, asking you to login to Microsoft Azure. Select your UWE account (or enter your UWE email address), enter your password, and complete the Multi-Factor Authentication (MFA) steps if required. Once you have successfully logged in you can close your browser and return to the terminal.
 
 !!! info
-    If you've forgotten your UWE account password, you can use the [Microsoft online password reset tool](https://passwordreset.microsoftonline.com/Default.aspx?whr=uwe.ac.uk) to reset it. You will need access to two of your authentication methods you setup when you first logged in to do this.
+    If you've forgotten your UWE account password, you can use the [Microsoft online password reset tool](https://passwordreset.microsoftonline.com/Default.aspx?whr=uwe.ac.uk){:target="_blank"} to reset it. You will need access to two of your authentication methods you setup when you first logged in to do this.
 
     If you cannot reset your password or have other issues logging in to your UWE account you will need to contact IT Services on [01173283612](tel:01173283612) - your module tutors cannot help with this.
 
