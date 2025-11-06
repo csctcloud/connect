@@ -14,7 +14,7 @@ ssh <UWE email address>@csctcloud.uwe.ac.uk
 
     If you chose to use a different public key algorithm when you generated your key you'll need to update the command to reference that key.
 
-Replace `<UWE email address>` with your full UWE email address, making sure it is completely in lowercase.
+Replace `<UWE email address>` with your full UWE email address, making sure it is completely in lowercase and then press ++return++ to run the command.
 
 !!! example
     If your email address was `A.Student@live.uwe.ac.uk` you would connect using the command:
