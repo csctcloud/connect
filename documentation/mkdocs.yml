@@ -52,7 +52,7 @@ nav:
     - Copying keys to the server: getting-started/copy-keys.md
   - Connecting to the server: 
     - Connect with the terminal: connecting/terminal.md
-    - Visual Studio Code: connecting/vscode.md
+    - Setup Visual Studio Code: connecting/vscode.md
   - Additional Topics:
     - Terminal programs: additional/terminals.md
     - Installing OpenSSH: additional/install-openssh.md
