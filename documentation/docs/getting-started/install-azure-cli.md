@@ -1,5 +1,5 @@
 # Install the Azure Command-Line Interface
-CSCTCloud is hosted using Azure, Microsoft's cloud computing platform. To be able to first connect to the server we need to install the Command-Line Interface (CLI) provided for the platform.
+CSCT Cloud is hosted using Azure, Microsoft's cloud computing platform. To be able to first connect to the server we need to install the Command-Line Interface (CLI) provided for the platform.
 
 !!! tip "UWE lab computers"
     If you're working on a UWE lab computer the Azure CLI is already installed, continue on to the next page to use the CLI to copy your SSH key to the server.
