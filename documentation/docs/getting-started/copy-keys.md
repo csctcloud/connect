@@ -56,12 +56,9 @@ Open a new terminal window and use this command to open your public key:
     ```
 
 === "UWE lab computers"
-    !!! tip "UWE lab computers"
-        To open the copy of your public key stored on OneDrive, use:
-
-        ``` powershell
-        type $env:USERPROFILE'\OneDrive - UWE Bristol\.ssh\id_rsa.pub'
-        ```
+    ``` powershell
+    type $env:USERPROFILE'\OneDrive - UWE Bristol\.ssh\id_rsa.pub'
+    ```
 
 Select the entire public key (the block of text starting with `ssh-rsa`) and copy it using ++ctrl+c++ (or ++cmd+c++ on a mac).
 
@@ -82,7 +79,7 @@ Create a new directory to store files relating to SSH connections:
 mkdir ~/.ssh
 ```
 
-Use Nano, a text editing program, to create and edit a file to store your keys:
+Use nano, a text editing program, to create and edit a file to store your keys:
 ``` bash
 nano ~/.ssh/authorized_keys
 ```
