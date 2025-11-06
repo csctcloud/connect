@@ -46,7 +46,7 @@ markdown_extensions:
 
 nav:
   - Introduction: index.md
-  - Getting Started:
+  - Getting started:
     - Generating SSH keys: getting-started/generate-keys.md
     - Installing Azure CLI: getting-started/install-azure-cli.md
     - Copying keys to the server: getting-started/copy-keys.md
