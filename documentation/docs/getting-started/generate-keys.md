@@ -17,7 +17,8 @@ The command will ask you a few questions: the location to save your keys, and fo
     With this command we're specifying we want to use the `rsa` public key algorithm. There are other [public key algorithms](https://www.ssh.com/academy/ssh/keygen#choosing-an-algorithm-and-key-size) we could use such as `ecdsa` and `ed25519` - you can choose to use one of these if you wish, but it will change some of the commands used later on to connect to the server.
 
 ### Where to save your keys
-Save your keys to the default suggested location for your operating system, you can choose the default location by pressing ++enter++ when prompted to enter a file name:
+Save your keys to the default suggested location for your operating system, you can choose the default location (shown in the brackets) by pressing ++enter++ when prompted to enter a file:
+
 === "Windows"
     ``` { .text .no-copy }
     Generating public/private rsa key pair.
@@ -58,5 +59,4 @@ To copy your SSH keys to OneDrive open PowerShell and run
 Copy-Item -Path "$env:USERPROFILE\.ssh\*" -Destination "$env:USERPROFILE\OneDrive - UWE Bristol\.ssh" -Recurse
 ```
 
-!!! tip "UWE lab computers"
-    When connecting to the server and setting up Visual Studio Code on a UWE lab computer, you'll need to use slightly different commands to refer to this OneDrive location to be able to connect.
+When connecting to the server and setting up Visual Studio Code on a UWE lab computer, you'll need to use slightly different commands to refer to this OneDrive location to be able to connect.
