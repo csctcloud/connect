@@ -1,3 +1,7 @@
+---
+hide:
+    - footer
+---
 # Choosing a terminal
 You'll need to use a terminal program to interact with CSCT Cloud, all operating systems come with at least one, there are also other third party terminal terminal applications you can use.
 

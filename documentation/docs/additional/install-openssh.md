@@ -1,3 +1,7 @@
+---
+hide:
+    - footer
+---
 # Installing OpenSSH
 OpenSSH is a tool used for remotely logging into servers using the SSH protocol. It's normally already included in modern operating systems but if you're using an older version of Windows you'll need to install it to be able to generate SSH keys and launch SSH connections.
 
