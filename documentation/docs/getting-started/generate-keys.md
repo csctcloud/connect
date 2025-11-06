@@ -60,5 +60,3 @@ Copy-Item -Path "$env:USERPROFILE\.ssh\*" -Destination "$env:USERPROFILE\OneDriv
 
 !!! tip "UWE lab computers"
     When connecting to the server and setting up Visual Studio Code on a UWE lab computer, you'll need to use slightly different commands to refer to this OneDrive location to be able to connect.
-
-    These alternative commands will look like this throughout the CSCT Cloud documentation.
