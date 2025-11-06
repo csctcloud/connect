@@ -5,7 +5,16 @@ Once you've copied your public key to the server, you can connect by entering th
 ssh <UWE email address>@csctcloud.uwe.ac.uk
 ```
 
-Replacing `<UWE email address>` with your full UWE email address, making sure it is completely in lowercase.
+!!! tip "UWE lab computers"
+    If you're using a UWE lab computer you need to enter a modified version of this command to use the version of your key stored on OneDrive instead:
+
+    ``` powershell
+    ssh -i $env:USERPROFILE'\OneDrive - UWE Bristol\.ssh\id_rsa' <UWE email address>@csctcloud.uwe.ac.uk
+    ```
+
+    If you chose to use a different public key algorithm when you generated your key you'll need to update the command to reference that key.
+
+Replace `<UWE email address>` with your full UWE email address, making sure it is completely in lowercase.
 
 !!! example
     If your email address was `A.Student@live.uwe.ac.uk` you would connect using the command:
@@ -15,15 +24,6 @@ Replacing `<UWE email address>` with your full UWE email address, making sure it
     ```
 
 When prompted, enter the passphrase for your key if you set one.
-
-!!! tip "UWE lab computers"
-    If you're using a UWE lab computer you need to enter a modified version of this command to use the version of your key stored on OneDrive instead:
-
-    ``` powershell
-    ssh -i $env:USERPROFILE'\OneDrive - UWE Bristol\.ssh\id_rsa' <UWE email address>@csctcloud.uwe.ac.uk
-    ```
-
-    If you chose to use a different public key algorithm when you generated your key you'll need to update the command to reference that key.
 
 If you've successfully connected you should find yourself in a terminal session on the server:
 ``` { .console .no-copy }
