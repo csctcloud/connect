@@ -129,7 +129,7 @@ Once the setup process finishes Visual Studio Code is now ready for you to work 
 ## Interacting with the server
 Once you're connected to the server you can use Visual Studio Code in exactly the same way you would when using it on your local computer.
 
-The *Explorer* tab will let you open folders within your home directory on the server which you can create new directorys and files to work in, and you can launch a new terminal window within Visual Studio Code using the *Terminal* menu at the top.
+The *Explorer* tab will let you open folders within your home directory on the server which you can create new directories and files to work in, and you can launch a new terminal window within Visual Studio Code using the *Terminal* menu at the top.
 
 If you're completely new to using Visual Studio Code, have a look at the [Official Beginner Tutorial](https://www.youtube.com/watch?v=B-s71n0dHUk){:target="_blank"} from Microsoft to get started.
 
