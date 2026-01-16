@@ -18,3 +18,14 @@ options:
 
 Issues:
 * Certificate is only issued for an hour -- ideally would be issued for remainder of token life (or configurable) -- [Github Issue](https://github.com/Azure/azure-cli-extensions/issues/3565)
+
+## Build
+From target OS (i.e. Windows for builds to be deployed to UWE lab machines)
+
+* Create a python virtual environment
+* Install [pyinstaller](https://pypi.org/project/pyinstaller/)
+* Run `build.py`, built binary will be in a version/target os zip
+* Pass on binary to be deployed
+
+## Deployment
+CSCT Cloud Connect is on the software deployment list so should continue being deployed to labs when they're rebuilt. Contact the Software Delivery team to request an update to deployed version or to have connect deployed to more labs/teaching spaces.
